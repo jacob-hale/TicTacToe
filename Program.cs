@@ -1,4 +1,6 @@
-﻿using TicTacToe;
+﻿using System;
+using TicTacToe;
+
 internal class Program
 
 {
@@ -14,15 +16,17 @@ internal class Program
 
         string currentPlayer = "X";
         bool gameOver = false;
-            
+        int turnCount = 0;
+
+
         // Main game loop
         while (!gameOver)
         {
             // Print current gameboard
-            GameBoard.PrintBoard(board);
+            Board.PrintBoard(board);
             
             // Prompt current player for a move
-            Console.WriteLine($"Player {currentPlayer}, choose a position 1-9");
+            Console.WriteLine($"Player {currentPlayer}, choose a position (1-9): ");
 
             int choice;
             bool validMove = false;
@@ -39,38 +43,39 @@ internal class Program
                     board[choice - 1] != "O")
                 {
                     board[choice - 1] = currentPlayer;
+                    turnCount++;
                     validMove = true;
                 }
                 else
                 {
                     Console.WriteLine("Invalid choice. Please select an open position (1-9): ");
                 }
+
             }
-            
-            //Check for a winner or tie
-            string result = GameBoard.CheckWinner(board);
-            
-            // IF X or O won
+
+            // Check for a winner
+            string result = Board.CheckWinner(board);
+
+            // If X or O won
             if (result == "X" || result == "O")
             {
-                GameBoard.PrintBoard(board);
+                Board.PrintBoard(board);
                 Console.WriteLine($"Player {result} wins!");
                 gameOver = true;
             }
-            
-            // IF the game is a tie
-            else if (result == "tie")
+            // If all 9 turns have been played and no winner, it's a tie
+            else if (turnCount == 9)
             {
-                GameBoard.PrintBoard(board);
+                Board.PrintBoard(board);
                 Console.WriteLine("The game ends in a tie!");
                 gameOver = true;
             }
-            
-            //Otherwise, switch players and continue
+            // Otherwise, switch players and continue
             else
             {
                 currentPlayer = (currentPlayer == "X") ? "O" : "X";
             }
+
         }
     }
     
